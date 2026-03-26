@@ -33,14 +33,15 @@ const RealTimeRooms = ({ initialRooms }: { initialRooms: Room[] }) => {
       .select("*")
       .order("room_number");
 
-      if(data) setRooms(data as Room[]);
+    if (data) setRooms(data as Room[]);
   };
 
-  return <div>
-    {rooms.map((room)=> (
-        <RoomCard key={room.id} room={room}/>
+  return (
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+    {rooms.map((room) => (
+      <RoomCard key={room.id} room={room} />
     ))}
-  </div>;
+  </div>)
 };
 
 export default RealTimeRooms;

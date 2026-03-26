@@ -1,15 +1,56 @@
-import { Room } from "../types/room"; 
+import { stat } from "fs";
+import { Room } from "../types/room";
 
 interface RoomCardProps {
-    room: Room;
+  room: Room;
 }
 
-export default function RoomCard({room}: RoomCardProps){
-    return (
-        <div className={`p-4 border rounded-lg ${room.status === 'available' ? 'bg-green-100' : 'bg-red-100'}`}>
-      <h3 className="font-bold text-lg">Habitación {room.room_number}</h3>
-      <p className="text-sm text-gray-600">{room.type}</p>
-      <span className="capitalize font-medium">{room.status}</span>
+const statusStyles = {
+  available: {
+    card: "bg-green-50 border-green-200",
+    badge: "bg-green-500 text-white",
+    dot: "bg-green-600"
+  },
+  occupied: {
+    card: "bg-red-50 border-red-200",
+    badge: "bg-red-500 text-white",
+    dot: "bg-red-600"
+  },
+  cleaning: {
+    card: "bg-yellow-50 border-yellow-200",
+    badge: "bg-yellow-400 text-yellow-900",
+    dot: "bg-yellow-600"
+  },
+};
+
+export default function RoomCard({ room }: RoomCardProps) {
+
+    const style = statusStyles[room.status];
+    
+  return (
+    <div className={`p-5 border rounded-2xl m-4 max-w-sm transition-all hover:shadow-md ${style.card}`}>
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col">
+          <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">
+            Room
+          </span>
+          <h3 className="font-black text-2xl text-slate-800">
+            {room.room_number}
+          </h3>
+          <p className="text-sm text-slate-500 font-medium italic">
+            {room.type}
+          </p>
+        </div>
+
+        {/* El Badge que ahora sí toma el color del objeto */}
+        <div className="flex flex-col items-end gap-2">
+          <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-sm ${style.badge}`}>
+            {room.status}
+          </span>
+          {/* Un puntito decorativo solo para lucir el TS */}
+          <div className={`w-2 h-2 rounded-full animate-pulse ${style.dot}`} />
+        </div>
+      </div>
     </div>
-    )
+  );
 }
