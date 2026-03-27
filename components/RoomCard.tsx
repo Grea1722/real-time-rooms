@@ -20,6 +20,10 @@ const statusStyles = {
     card: "bg-yellow-50 border-yellow-200",
     badge: "bg-yellow-400 text-yellow-900",
     dot: "bg-yellow-600"
+  },maintenance: {
+    card: "bg-slate-100 border-slate-300",
+    badge: "bg-slate-500 text-white",
+    dot: "bg-slate-700"
   },
 };
 

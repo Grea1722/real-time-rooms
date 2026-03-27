@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function middleware(request: NextRequest){
+export async function proxy(request: NextRequest){
     let supabaseResponse = NextResponse.next({request})
 
     const supabase = createServerClient(
@@ -21,5 +21,16 @@ export async function middleware(request: NextRequest){
             },
         }
     )
-
+    
+    const {data: {user}} = await supabase.auth.getUser();
+    //si no hay 1usuario redireccionamos
+    if(!user && !request.nextUrl.pathname.startsWith("/login")){
+        return NextResponse.redirect(new URL("/login", request.url))
+        
+    }
+    return supabaseResponse
 }
+  //matcher
+    export const config ={
+        matcher:['/dashboard/:path*','/admin/:path*']
+    }
