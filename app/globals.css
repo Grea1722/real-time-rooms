@@ -3,7 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --primary: #0F172A;
+  --color-primary: #0F172A;
   --secondary : #c5a059;
   --tertiary: #065e3b;
 }
@@ -13,6 +13,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-primary: var(--color-primary)
 }
 
 body {
