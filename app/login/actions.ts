@@ -16,7 +16,7 @@ export async function loginAction(formData: FormData) {
         return redirect("/login?error=Invalid credentials");
     }
 
-    //limpiamox cache para que el proxy vea un nuevo usuario
+    //limpiamos cache para que el proxy vea un nuevo usuario
     revalidatePath("/",'layout');
     redirect("/dashboard");
 }
