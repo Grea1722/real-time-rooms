@@ -6,7 +6,7 @@ import { Room } from "@/types/room";
 export default async function Home() {
   //const rooms
   const {data: rooms, error} = await supabase
-    .from('rooms')
+    .from('rooms')  
     .select('*')
     .order('room_number', {ascending: true})
 
