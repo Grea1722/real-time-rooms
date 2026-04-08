@@ -1,9 +1,13 @@
+import Navbar from "@/components/Navbar";
 import RealTimeRooms from "@/components/RealTimeRooms";
 import RoomCard from "@/components/RoomCard";
 import { supabase } from "@/lib/supabase";
+import { useUserStore } from "@/store/useUserStore";
 import { Room } from "@/types/room";
+import { createClient } from "@/utils/supabase/server";
 
 export default async function Home() {
+
   //const rooms
   const {data: rooms, error} = await supabase
     .from('rooms')  
@@ -22,6 +26,7 @@ export default async function Home() {
     <div >
       <main >
         <header className="mb-10">
+          <Navbar />
         <h1 className="text-4xl font-black text-slate-900 tracking-tight">
           Hotel Monitor <span className="text-blue-600 text-2xl">v1.0</span>
         </h1>

@@ -1,4 +1,5 @@
 'use server'
+import { registerSchema } from "@/lib/validations/registerSchema";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -7,11 +8,19 @@ export type ActionState = {
 }
 
 export async function registerAction(prevState:any, formData: FormData) {
-  const supabase = await createClient();
+  //get form data and validate it using zod schema
+  const rawData = Object.fromEntries(formData.entries());
 
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-  const fullname = formData.get("fullname") as string;
+  const validation = registerSchema.safeParse(rawData);
+  if(!validation.success){
+    //return the first error message to the client
+    return { error: validation.error.issues[0].message };
+  }
+
+  //if validation is successful, extract the validated data
+  const { fullname, email, password } = validation.data;
+
+  const supabase = await createClient();
 
   const { error } = await supabase.auth.signUp({
     email,

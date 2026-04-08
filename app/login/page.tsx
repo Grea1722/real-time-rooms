@@ -1,39 +1,88 @@
-'use client'
+"use client";
 
-import { useState } from "react"
-import { loginAction } from "./actions";
+import { useActionState, useTransition } from "react";
+import { guestLoginAction, loginAction } from "./actions";
+import { useForm } from "react-hook-form";
+import { LoginFormData, loginSchema } from "@/lib/validations/loginSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const LoginPage = () => {
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false); 
+  const [state, formAction, isPending] = useActionState(loginAction, {
+    error: null,
+  });
+  const [guestState, guestFormAction, isGuestPending] = useActionState(
+    guestLoginAction,
+    {
+      error: null,
+    },
+  );
 
-    //guest function
-    const startLogin =async (email?:string, pass?:string) => {
-        const data = new FormData();
-        if(email && pass){
-            data.append("email", email);
-            data.append("password",pass);
-            await loginAction(data);
-        }
-    };
+  const [, startTransition] = useTransition();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit = (data: LoginFormData) => {
+    const formData = new FormData();
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+
+    startTransition(() => {
+      formAction(formData);
+    });
+  };
+
+  const loginAsGuest = () => {
+    startTransition(()=> {
+      guestFormAction();
+    })
+  }
 
   return (
     <div className="p-10">
-        <h2 className="font-bold text-xl">Iniciar Sesion</h2>
-      <form action={loginAction} className="flex flex-col gap-4">
-        <input name="email" type="email" placeholder="user@email.com" className="border p-2" />
-        <input type="password" name="password" placeholder="******" className="border p-2" />
-        <button type="submit" className="bg-primary p-2 text-white">Entrar</button>
+      <h2 className="font-bold text-xl">Iniciar Sesion</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <input
+          {...register("email")}
+          type="email"
+          placeholder="user@email.com"
+          className="border p-2"
+        />
+        {errors.email && (
+          <p className="text-red-500 text-sm">{errors.email.message}</p>
+        )}
+        <input
+          {...register("password")}
+          type="password"
+          placeholder="******"
+          className="border p-2"
+        />
+        {errors.password && ( <p className="text-red-500 text-sm">{errors.password.message}</p>)}
+        <button
+          type="submit"
+          className="bg-primary p-2 text-white"
+          disabled={isSubmitting || isPending}
+        >
+          Entrar
+        </button>
       </form>
 
-      <hr className="my-8"/>
+      <hr className="my-8" />
 
-      <button  
-      onClick={() => startLogin("guest@email.com", "password1234")}
-      className="bg-gray-800 text-white p-4 rounded-xl" >Entrar como invitado</button>
-
+      <button
+        onClick={loginAsGuest}
+        className="bg-gray-800 text-white p-4 rounded-xl"
+        disabled={isGuestPending}
+      >
+        Entrar como invitado
+      </button>
     </div>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;
