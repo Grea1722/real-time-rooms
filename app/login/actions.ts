@@ -26,7 +26,7 @@ export async function loginAction(prevState: any,formData: FormData) {
 
     //limpiamos cache para que el proxy vea un nuevo usuario
     revalidatePath("/","layout");
-    redirect("/dashboard");
+    redirect("/");
 
     return { error: null };
 }

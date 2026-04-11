@@ -3,7 +3,7 @@
 import { supabase } from "@/lib/supabase";
 import { Room } from "@/types/room";
 import React, { useEffect, useState } from "react";
-import RoomCard from "./RoomCard";
+import RoomCard from "./rooms/RoomCard";
 
 const RealTimeRooms = ({ initialRooms }: { initialRooms: Room[] }) => {
   const [rooms, setRooms] = useState(initialRooms);

@@ -1,5 +1,5 @@
 import { stat } from "fs";
-import { Room } from "../types/room";
+import { Room } from "../../types/room";
 
 interface RoomCardProps {
   room: Room;
@@ -9,30 +9,33 @@ const statusStyles = {
   available: {
     card: "bg-green-50 border-green-200",
     badge: "bg-green-500 text-white",
-    dot: "bg-green-600"
+    dot: "bg-[#064E3B]",
   },
   occupied: {
     card: "bg-red-50 border-red-200",
-    badge: "bg-red-500 text-white",
-    dot: "bg-red-600"
+    dot: "bg-[#7F1D1D]",
   },
   cleaning: {
     card: "bg-yellow-50 border-yellow-200",
     badge: "bg-yellow-400 text-yellow-900",
-    dot: "bg-yellow-600"
-  },maintenance: {
+    dot: "bg-yellow-600",
+  },
+  maintenance: {
     card: "bg-slate-100 border-slate-300",
     badge: "bg-slate-500 text-white",
-    dot: "bg-slate-700"
+    dot: "bg-slate-700",
   },
 };
 
 export default function RoomCard({ room }: RoomCardProps) {
+  const style = statusStyles[room.status];
 
-    const style = statusStyles[room.status];
-    
   return (
-    <div className={`p-5 border rounded-2xl m-4 max-w-sm transition-all hover:shadow-md ${style.card}`}>
+    <div
+      className={`relative overflow-hidden p-5 border rounded-2xl m-4 max-w-sm transition-all hover:shadow-md border border-slate-200 shadow-sm`}
+    >
+      <div className={`absolute top-0 inset-x-0 h-[6px] ${style.dot}`}></div>
+
       <div className="flex items-center justify-between">
         <div className="flex flex-col">
           <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">
@@ -48,7 +51,9 @@ export default function RoomCard({ room }: RoomCardProps) {
 
         {/* El Badge que ahora sí toma el color del objeto */}
         <div className="flex flex-col items-end gap-2">
-          <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-sm ${style.badge}`}>
+          <span
+            className={`px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-sm ${style.dot} text-white`}
+          >
             {room.status}
           </span>
           {/* Un puntito decorativo solo para lucir el TS */}
