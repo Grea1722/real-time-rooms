@@ -17,12 +17,11 @@ const RoomOverview = () => {
 
   return (
     <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-      <RoomStatCard label="Libres" value={stats.available} status="available" />
-      <RoomStatCard label="Ocupadas" value={stats.occupied} status="occupied" />
-      <RoomStatCard label="Limpieza" value={stats.cleaning} status="cleaning" />
-      {/* Ejemplo de la imagen */}
+      <RoomStatCard label="Available" value={stats.available} status="available" />
+      <RoomStatCard label="Occupied" value={stats.occupied} status="occupied" />
+      <RoomStatCard label="Cleaning" value={stats.cleaning} status="cleaning" />
       <RoomStatCard
-        label="Mantenimiento"
+        label="Maintenance"
         value={stats.maintenance}
         status="maintenance"
       />

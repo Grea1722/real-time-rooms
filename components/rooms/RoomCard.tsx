@@ -1,6 +1,6 @@
-import { stat } from "fs";
-import { Room } from "../../types/room";
 
+import { useRoomStore } from "@/store/useRoomStore";
+import { Room } from "../../types/room";
 interface RoomCardProps {
   room: Room;
 }
@@ -29,10 +29,23 @@ const statusStyles = {
 
 export default function RoomCard({ room }: RoomCardProps) {
   const style = statusStyles[room.status];
+  const updateRoomStatus= useRoomStore((state) => state.updateRoomStatus); 
+
+
+  const handleStatusChange = () => {
+    const statuses: Room["status"][]= ["available", "occupied", "cleaning", "maintenance"];
+    const currentIndex = statuses.indexOf(room.status);
+    const newIndex = (currentIndex + 1) % statuses.length;
+    const newStatus = statuses[newIndex];
+
+    updateRoomStatus(room.id, newStatus);
+  }
 
   return (
     <div
-      className={`relative overflow-hidden p-5 border rounded-2xl m-4 max-w-sm transition-all hover:shadow-md border border-slate-200 shadow-sm`}
+    onClick={handleStatusChange}
+      key={room.id}
+      className={`relative overflow-hidden p-5 border rounded-2xl m-4 max-w-sm transition-all hover:shadow-md cursor-pointer border-slate-200 shadow-sm`}
     >
       <div className={`absolute top-0 inset-x-0 h-[6px] ${style.dot}`}></div>
 

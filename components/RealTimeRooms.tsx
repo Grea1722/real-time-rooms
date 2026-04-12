@@ -4,9 +4,11 @@ import { supabase } from "@/lib/supabase";
 import { Room } from "@/types/room";
 import React, { useEffect, useState } from "react";
 import RoomCard from "./rooms/RoomCard";
+import { useRoomStore } from "@/store/useRoomStore";
 
 const RealTimeRooms = ({ initialRooms }: { initialRooms: Room[] }) => {
-  const [rooms, setRooms] = useState(initialRooms);
+  const rooms = useRoomStore((state) => state.rooms);
+  const setRooms = useRoomStore((state) => state.setRooms);
 
   useEffect(() => {
     //Suscripcion al canal de Realtime
@@ -16,7 +18,6 @@ const RealTimeRooms = ({ initialRooms }: { initialRooms: Room[] }) => {
         "postgres_changes",
         { event: "*", schema: "public", table: "rooms" },
         (payload) => {
-          console.log("Cambio detectado!", payload);
           fetchFreshData();
         },
       )
@@ -37,11 +38,12 @@ const RealTimeRooms = ({ initialRooms }: { initialRooms: Room[] }) => {
   };
 
   return (
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-    {rooms.map((room) => (
-      <RoomCard key={room.id} room={room} />
-    ))}
-  </div>)
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+      {rooms.map((room) => (
+        <RoomCard key={room.id} room={room} />
+      ))}
+    </div>
+  );
 };
 
 export default RealTimeRooms;
